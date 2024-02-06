@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_icon"
+            android:title="Главная страница"/>
+
+        <item
+            android:id="@+id/nav_author"
+            android:icon="@drawable/author_icon"
+            android:title="Об авторе" />
+
+        <item
+            android:id="@+id/nav_prog"
+            android:icon="@drawable/info_icon"
+            android:title="О программе" />
+
+        <item
+            android:id="@+id/nav_instruction"
+            android:icon="@drawable/instruction_icon"
+            android:title="Инструкция" />
+
+        <item
+            android:id="@+id/nav_git"
+            android:icon="@drawable/git"
+            android:title="GitHub" />
+
+        <item
+            android:id="@+id/nav_admin"
+            android:icon="@drawable/admin"
+            android:title="Админ-панель"
+            android:visible="false"/>
+
+    </group>
+
+    <item
+        android:title="">
+
+        <menu>
+
+            <item
+            android:id="@+id/nav_input"
+            android:icon="@drawable/input_icon"
+            android:title="Выход" />
+
+        </menu>
+
+
+
+    </item>
+
+</menu>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Cinema</string>
+    <string name="Enter">Войти</string>
+    <string name="password">Пароль</string>
+    <string name="email">Почта</string>
+    <string name="forgetPassword">Забыли пароль?</string>
+    <string name="registration">Зарегистрироваться</string>
+    <string name="confirmedPassword">Подветверждение пароля</string>
+    <string name="passwordRule">Используйте больше 8 символов и цифры</string>
+    <string name="regWithEmail">Зарегистрироваться</string>
+    <string name="haveAcc">Уже имеете аккаунт?</string>
+    <string name="noAcc">Нет аккаунта?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="github">GitHub разработчика</string>
+</resources>
