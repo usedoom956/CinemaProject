@@ -24,5 +24,20 @@
         <action
             android:id="@+id/action_regFragment_to_authFragment"
             app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_regFragment_to_regFormFragment"
+            app:destination="@id/regFormFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/regFormFragment"
+        android:name="com.example.cinema.FirstPages.RegFormFragment"
+        android:label="fragment_reg_form"
+        tools:layout="@layout/fragment_reg_form" >
+        <action
+            android:id="@+id/action_regFormFragment_to_authFragment"
+            app:destination="@id/authFragment" />
+        <action
+            android:id="@+id/action_regFormFragment_to_regFragment"
+            app:destination="@id/regFragment" />
     </fragment>
 </navigation>

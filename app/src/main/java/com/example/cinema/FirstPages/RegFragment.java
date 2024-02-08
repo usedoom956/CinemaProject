@@ -25,19 +25,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegFragment extends Fragment {
-
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static boolean password_check = false;
     private static boolean password_confirmed = false;
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference mUsersRef = mDatabase.getReference("user_data");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +59,7 @@ public class RegFragment extends Fragment {
         enter.setOnClickListener(v -> navController.navigate(R.id.action_regFragment_to_authFragment));
 
         registration.setOnClickListener(v -> handleRegistrationButtonClick(navController, login, password, passwordConfirmed));
+
     }
 
     private void handleRegistrationButtonClick(NavController navController, EditText login, EditText password, EditText passwordConfirmed) {
@@ -86,32 +85,14 @@ public class RegFragment extends Fragment {
     }
 
     private void registerUser(NavController navController, EditText login, EditText password) {
-        mAuth.createUserWithEmailAndPassword(login.getText().toString(), password.getText().toString())
-                .addOnCompleteListener(getActivity(), task -> {
-                    if (task.isSuccessful()) {
-                        String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-
-                        Map<String, Object> user = new HashMap<>();
-                        user.put("login", login.getText().toString());
-                        user.put("password", password.getText().toString());
-
-                        mUsersRef.child(userId).setValue(user);
-                        Toast.makeText(getContext(), "Вы успешно зарегистрировались", Toast.LENGTH_LONG).show();
-                        navController.navigate(R.id.action_regFragment_to_authFragment);
-                    } else {
-                        handleRegistrationFailure(task);
-                    }
-                });
+        // Передаем логин и пароль в аргументы RegFormFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("login", login.getText().toString());
+        bundle.putString("password", password.getText().toString());
+        // Навигация на RegFormFragment с передачей аргументов
+        navController.navigate(R.id.action_regFragment_to_regFormFragment, bundle);
     }
 
-    private void handleRegistrationFailure(Task<AuthResult> task) {
-        Exception exception = task.getException();
-        if (exception instanceof FirebaseAuthUserCollisionException) {
-            Toast.makeText(getContext(), "Данный логин уже занят", Toast.LENGTH_LONG).show();
-        } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-            Toast.makeText(getContext(), "Вы неправильно ввели почту", Toast.LENGTH_LONG).show();
-        }
-    }
 
     // Метод для проверки сложности пароля
     private boolean isPasswordValid(String password) {

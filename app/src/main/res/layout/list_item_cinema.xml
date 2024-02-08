@@ -2,56 +2,68 @@
 <!-- res/layout/list_item_disk.xml -->
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="500dp"
     android:padding="16dp"
     android:background="@color/LightGray"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
-        android:id="@+id/imageViewPeople"
-        android:layout_width="150dp"
+        android:id="@+id/imageViewCinema"
+        android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"/>
-
-    <TextView
-        android:id="@+id/NameAndSurname"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1231232131"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/LightBlack"
-        android:layout_toEndOf="@id/imageViewPeople"
-        android:layout_marginStart="16dp"/>
-
-    <TextView
-        android:id="@+id/Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/NameAndSurname"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:textColor="@color/black"
-        android:layout_toEndOf="@id/imageViewPeople"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:id="@+id/name_cinema"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewCinema"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="1231232131"
+        android:textColor="@color/Black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_cinema"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif-light"
         android:text="123123213111"
+        android:textColor="@color/Black"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/PostAndAge"
+        android:id="@+id/placeAndCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Email"
+        android:layout_below="@id/date"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="10dp"
-        android:layout_toEndOf="@+id/imageViewPeople"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/black"
+        android:textColor="@color/Black"
         android:maxLines="2"
         android:text="1231232131111"
         android:textSize="16sp" />
