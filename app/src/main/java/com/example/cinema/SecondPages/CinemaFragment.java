@@ -1,5 +1,6 @@
 package com.example.cinema.SecondPages;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
@@ -8,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cinema.SecondPages.CinemaHelpClasses.CinemaAdapter;
 import com.example.cinema.SecondPages.CinemaHelpClasses.CinemaDataClass;
@@ -106,6 +109,31 @@ public class CinemaFragment extends Fragment {
                 return true;
             }
         });
+
+        cinemaListView.setOnItemClickListener((parent, listView, position, id) -> {
+            // Получение выбранного элемента из адаптера
+            CinemaDataClass selectedCinema = adapter.getItem(position);
+
+            // Здесь можно выполнить действия в зависимости от выбранного элемента
+            if (selectedCinema != null) {
+                // Создаем новый фрагмент, передавая ему данные (например, ID выбранного кинотеатра)
+                SelectedCinemaFragment selectedCinemaFragment = new SelectedCinemaFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("name", selectedCinema.getName());
+                bundle.putString("date", selectedCinema.getDate());
+                bundle.putInt("place", selectedCinema.getFreeSeats());
+                bundle.putString("cinemaId", selectedCinema.getVenue()); // Необходимые данные
+                selectedCinemaFragment.setArguments(bundle);
+
+                // Заменяем текущий фрагмент на новый
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, selectedCinemaFragment); // R.id.fragment_container - это ID вашего контейнера фрагментов
+                transaction.addToBackStack(null); // Добавляем транзакцию в стек возврата
+                transaction.commit();
+            }
+        });
+
+
         filterUniqueCinemas();
     }
 

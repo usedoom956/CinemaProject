@@ -62,15 +62,27 @@ public class CinemaDatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteDuplicateCinemas() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + TABLE_CINEMA +
-                " WHERE " + KEY_NAME + " IN (SELECT " + KEY_NAME +
+
+        String tempTable = "tempTable";
+        String createTempTableQuery = "CREATE TEMPORARY TABLE " + tempTable +
+                " AS SELECT MIN(" + KEY_ID + ") AS " + KEY_ID +
                 " FROM " + TABLE_CINEMA +
-                " GROUP BY " + KEY_NAME +
-                " HAVING COUNT(*) > 1)";
+                " GROUP BY " + KEY_NAME;
+
+        db.execSQL(createTempTableQuery);
+
+        String deleteQuery = "DELETE FROM " + TABLE_CINEMA +
+                " WHERE " + KEY_ID + " NOT IN (SELECT " + KEY_ID +
+                " FROM " + tempTable + ")";
 
         db.execSQL(deleteQuery);
+
+        String dropTempTableQuery = "DROP TABLE IF EXISTS " + tempTable;
+        db.execSQL(dropTempTableQuery);
+
         db.close();
     }
+
 
     public List<CinemaDataClass> getAllCinema() {
         List<CinemaDataClass> cinemaList = new ArrayList<>();

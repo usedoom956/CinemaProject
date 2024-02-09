@@ -46,17 +46,28 @@ public class MainSecondPage extends AppCompatActivity {
 
         if (currentUser != null) {
             // Получаем информацию о текущем пользователе
-            String userName = currentUser.getDisplayName();
             String userEmail = currentUser.getEmail();
+            userEmailTextView.setText(userEmail);
 
-            // Устанавливаем значения в текстовые представления
-            if (userName != null && !userName.isEmpty()) {
-                userNameTextView.setText(userName);
-            }
+            String userId = currentUser.getUid();
 
-            if (userEmail != null && !userEmail.isEmpty()) {
-                userEmailTextView.setText(userEmail);
-            }
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("user_data").child(userId);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        String userName = dataSnapshot.child("name").getValue(String.class);
+                        if (userName != null && !userName.isEmpty()) {
+                            userNameTextView.setText(userName);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Обработка ошибок при чтении из базы данных
+                }
+            });
         }
 
         checkUserPrivileges();
