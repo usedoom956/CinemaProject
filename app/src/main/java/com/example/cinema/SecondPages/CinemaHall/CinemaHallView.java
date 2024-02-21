@@ -1,4 +1,4 @@
-package com.example.cinema.SecondPages;
+package com.example.cinema.SecondPages.CinemaHall;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,12 +8,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.view.View;
+import com.example.cinema.SecondPages.CinemaHelpClasses.CinemaDataClass;
 
 public class CinemaHallView extends View {
 
@@ -28,6 +23,26 @@ public class CinemaHallView extends View {
     private int selectedSeat = -1;
 
     private int screenHeight;
+
+    private CinemaDataClass cinemaData;
+
+    public void setSelectedSeat(int row, int seat) {
+        selectedRow = row;
+        selectedSeat = seat;
+        invalidate(); // Перерисовываем представление
+    }
+
+    public void setCinemaData(CinemaDataClass cinemaData) {
+        this.cinemaData = cinemaData;
+        // Представление, чтобы отобразить бронированные места
+        invalidate();
+    }
+
+    private OnSeatClickListener onSeatClickListener;
+
+    public void setOnSeatClickListener(OnSeatClickListener listener) {
+        this.onSeatClickListener = listener;
+    }
 
     public CinemaHallView(Context context) {
         super(context);
@@ -103,14 +118,18 @@ public class CinemaHallView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (cinemaData == null) {
+            // Если данные о кинозале не загружены, просто нарисуйте пустой вид
+            super.onDraw(canvas);
+            return;
+        }
         // Рисуем экран
-        canvas.drawRect(0, 0, getWidth(), getHeight()/10, screenPaint);
+        canvas.drawRect(0, 0, getWidth(), getHeight() / 10, screenPaint);
 
         // Рисуем места в зале
-
         int totalGapWidth = seatGap * (numSeatsPerRow - 1);
         int totalSeatWidth = getWidth() - totalGapWidth;
-        int seatWidth = totalSeatWidth / numSeatsPerRow - 50 ;
+        int seatWidth = totalSeatWidth / numSeatsPerRow - 50;
 
         int totalGapHeight = seatGap * (numRows - 1);
         int totalSeatHeight = getHeight() - totalGapHeight - screenHeight;
@@ -123,18 +142,29 @@ public class CinemaHallView extends View {
                 int right = left + seatWidth;
                 int bottom = top + seatHeight;
 
-                if (row == selectedRow && seat == selectedSeat) {
-                    // Рисуем выбранное место другим цветом
-                    seatPaint.setColor(Color.DKGRAY);
-                } else {
-                    // Рисуем обычное место
-                    seatPaint.setColor(Color.WHITE);
+                int seatNumber = getSeatNumber(row, seat);
+
+                if (cinemaData != null && cinemaData.getIsReserved() != null && seatNumber >= 0 && seatNumber < cinemaData.getIsReserved().size()) {
+                    boolean isSeatReserved = cinemaData.getIsReserved().get(seatNumber);
+
+                    if (isSeatReserved) {
+                        // Место забронировано, рисуем его в черный цвет
+                        seatPaint.setColor(Color.BLACK);
+                    } else if (row == selectedRow && seat == selectedSeat) {
+                        // Рисуем выбранное место другим цветом
+                        seatPaint.setColor(Color.DKGRAY);
+                    } else {
+                        // Рисуем обычное место
+                        seatPaint.setColor(Color.WHITE);
+                    }
                 }
-                // Рисуем красное место
+
+                // Рисуем место
                 canvas.drawRect(left, top, right, bottom, seatPaint);
             }
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -144,13 +174,29 @@ public class CinemaHallView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 // Найдите выбранное место по координатам касания
-                selectedRow = (int) (y / ((float) getHeight() / numRows));
-                selectedSeat = (int) (x / ((float) getWidth() / numSeatsPerRow));
+                int row = (int) (y / ((float) getHeight() / numRows));
+                int seat = (int) (x / ((float) getWidth() / numSeatsPerRow));
+
+                // Установите выбранные значения
+                selectedRow = row;
+                selectedSeat = seat;
+
+                // Вызовите слушателя, если установлен
+                if (onSeatClickListener != null) {
+                    onSeatClickListener.onSeatClick(row, seat);
+                }
+
                 invalidate(); // Перерисовываем представление
                 return true;
         }
 
         return super.onTouchEvent(event);
+    }
+
+
+    private int getSeatNumber(int row, int seat) {
+        // Возвращает уникальный номер места на основе его расположения
+        return row * numSeatsPerRow + seat;
     }
 
 }

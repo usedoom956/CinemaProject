@@ -25,7 +25,7 @@
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text=""
+        android:text="Данная программа разрабатывалась в рамках курсовой работы."
         android:textColor="@color/WhiteSmoke"
         android:textSize="18sp"
         android:layout_marginTop="20dp"
@@ -48,7 +48,8 @@
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:text=""
+        android:text="В данной программе реализуется афиша кино, в которой можно выбрать кино и забронировать
+место."
         android:textColor="@color/WhiteSmoke"
         android:textSize="16sp"
         android:layout_marginTop="20dp"

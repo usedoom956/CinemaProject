@@ -7,7 +7,7 @@
     android:background="@drawable/background"
     tools:context=".SecondPages.SelectedCinemaFragment">
 
-    <com.example.cinema.SecondPages.CinemaHallView
+    <com.example.cinema.SecondPages.CinemaHall.CinemaHallView
         android:id="@+id/cinemaHallView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,11 +1,17 @@
 package com.example.cinema.SecondPages.CinemaHelpClasses;
 
+import java.util.List;
+
 public class CinemaDataClass {
     private String name;
     private String venue;
     private int freeSeats;
     private String date;
-    private String imagePath;  // New field for image path
+    private String imagePath;
+
+    private List<Boolean> seats;
+
+    private List<Boolean> isReserved;
 
     public CinemaDataClass() {}
 
@@ -55,6 +61,22 @@ public class CinemaDataClass {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public void setIsReserved(List<Boolean> isReserved) {
+        this.isReserved = isReserved;
+    }
+
+    public void setSeats(List<Boolean> seats) {
+        this.seats = seats;
+    }
+
+    public List<Boolean> getIsReserved() {
+        return isReserved;
+    }
+
+    public List<Boolean> getSeats() {
+        return seats;
     }
 }
 
