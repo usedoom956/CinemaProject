@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cinema.R;
@@ -23,6 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AddCinemaFragment extends Fragment {
@@ -33,6 +38,7 @@ public class AddCinemaFragment extends Fragment {
     private DatabaseReference cinemaDatabaseReference;
 
     private EditText nameEditText, venueEditText, dateEditText;
+    private TextView freeSeats;
     private Button addImageButton, saveDataButton;
 
     @Override
@@ -48,6 +54,7 @@ public class AddCinemaFragment extends Fragment {
         nameEditText = view.findViewById(R.id.name_add);
         venueEditText = view.findViewById(R.id.venue_add);
         dateEditText = view.findViewById(R.id.date_add);
+        freeSeats = view.findViewById(R.id.seats_add);
 
         // Инициализация кнопок
         addImageButton = view.findViewById(R.id.add_image);
@@ -93,13 +100,65 @@ public class AddCinemaFragment extends Fragment {
             return;
         }
 
+        // Проверка правильности введенной даты
+        if (!isValidDate(dateEditText.getText().toString())) {
+            Toast.makeText(requireContext(), "Неверный формат даты", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Создание уникального имени файла для изображения
         String fileName = FirebaseAuth.getInstance().getCurrentUser().getUid() + "_" + System.currentTimeMillis() + ".jpg";
 
         // Получение ссылки на место в Storage, где будет хранится файл
         StorageReference fileReference = storageReference.child(fileName);
         // Загрузка изображения в Storage
+        int seats = 20;
+        fileReference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Получение ссылки на загруженное изображение
+                    fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        // Создание объекта DiskDataClass с введенными данными и ссылкой на изображение
+                        CinemaDataClass cinemaData = new CinemaDataClass(
+                                nameEditText.getText().toString(),
+                                venueEditText.getText().toString(),
+                                seats,
+                                dateEditText.getText().toString(),
+                                uri.toString()
+                        );
 
+                        // Сохранение данныых в Realtime Database
+                        String cinemaName = nameEditText.getText().toString();
+                        cinemaDatabaseReference.child(cinemaName).setValue(cinemaData)
+                                .addOnSuccessListener(aVoid -> {
+                                    // Успешно сохранено
+                                    Toast.makeText(requireContext(), "Данные сохранены", Toast.LENGTH_SHORT).show();
+                                    // Очистка поля ввода
+                                    clearInputFields();
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Ошибка при сохранении
+                                    Toast.makeText(requireContext(), "Ошибка при сохранении данных", Toast.LENGTH_SHORT).show();
+                                });
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Ошибка при загрузке изображения
+                    Toast.makeText(requireContext(), "Ошибка при загрузке изображения", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private boolean isValidDate(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.mm.yyyy", Locale.getDefault());
+        sdf.setLenient(false);
+
+        try {
+            // Пытаемся распарсить введенную дату
+            Date date = sdf.parse(dateStr);
+            return true; // Если успешно, дата введена верно
+        } catch (ParseException e) {
+            // Если происходит ParseException, значит дата введена неверно
+            return false;
+        }
     }
 
     private void clearInputFields() {

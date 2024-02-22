@@ -42,8 +42,7 @@ import java.util.Set;
 
 public class CinemaFragment extends Fragment {
 
-    private List<CinemaDataClass> cinemaList;
-    private List<CinemaDataClass> originalCinemaList;
+    private List<CinemaDataClass> cinemaList, originalCinemaList;
 
     private CinemaDatabaseHelper dbHelper;
 
@@ -52,8 +51,7 @@ public class CinemaFragment extends Fragment {
     private boolean up = false;
     private boolean down = false;
 
-    private ImageView upArrow;
-    private ImageView downArrow;
+    private ImageView upArrow, downArrow, upArrowForName, downArrowForName;
 
     private SearchView search;
 
@@ -88,12 +86,16 @@ public class CinemaFragment extends Fragment {
 
         upArrow = view.findViewById(R.id.upForTime);
         downArrow = view.findViewById(R.id.downForTime);
+        upArrowForName = view.findViewById(R.id.upForName);
+        downArrowForName = view.findViewById(R.id.downForName);
         CardView time = view.findViewById(R.id.time);
+        CardView name = view.findViewById(R.id.name_cinema_filter);
         search = view.findViewById(R.id.search);
         cinemaListView = view.findViewById(R.id.cinemaList);
 
         search.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_URI);
         time.setOnClickListener(view1 -> filterByTime());
+        name.setOnClickListener(view1 -> filterByNameFilter());
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -176,7 +178,7 @@ public class CinemaFragment extends Fragment {
             cinemaRef.child(cinema2.getName().replace(".", "_")).setValue(cinema2);
         }
 
-
+        dbHelper.deleteCinemasWithNullName();
         dbHelper.deleteDuplicateCinemas();
         cinemaList.clear();
         cinemaList.addAll(dbHelper.getAllCinema());
@@ -237,13 +239,13 @@ public class CinemaFragment extends Fragment {
         List<CinemaDataClass> filteredList = new ArrayList<>();
 
         for (CinemaDataClass cinema : originalCinemaList) {
-            // Приведение имени человека и введенного запрос к нижнему регистру и проверка, содержится ли запрос в имени диска
+            // Приведение имени кино и введенного запрос к нижнему регистру и проверка, содержится ли запрос в имени кино
             if (cinema.getName().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(cinema);
             }
         }
 
-        // Обновление списка людей с отфильтрованным списком
+        // Обновление списка кино с отфильтрованным списком
         cinemaList.clear();
         cinemaList.addAll(filteredList);
 
@@ -252,4 +254,33 @@ public class CinemaFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
+
+    protected void filterByNameFilter() {
+        Comparator<CinemaDataClass> nameComparator = new Comparator<CinemaDataClass>() {
+            @Override
+            public int compare(CinemaDataClass cinema1, CinemaDataClass cinema2) {
+                // Сравнение по именам
+                return cinema1.getName().compareTo(cinema2.getName());
+            }
+        };
+
+        if (down) {
+            Collections.sort(cinemaList, nameComparator);
+            up = true;
+            down = false;
+            upArrowForName.setVisibility(View.VISIBLE);
+            downArrowForName.setVisibility(View.INVISIBLE);
+        } else {
+            Collections.sort(cinemaList, Collections.reverseOrder(nameComparator));
+            up = false;
+            down = true;
+            upArrowForName.setVisibility(View.INVISIBLE);
+            downArrowForName.setVisibility(View.VISIBLE);
+        }
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 }

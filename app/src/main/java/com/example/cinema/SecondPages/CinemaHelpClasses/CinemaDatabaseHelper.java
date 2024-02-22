@@ -124,6 +124,14 @@ public class CinemaDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return isUnique;
     }
+
+    public void deleteCinemasWithNullName() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + TABLE_CINEMA +
+                " WHERE " + KEY_NAME + " IS NULL OR " + KEY_NAME + " = ''";
+        db.execSQL(deleteQuery);
+        db.close();
+    }
 }
 
 

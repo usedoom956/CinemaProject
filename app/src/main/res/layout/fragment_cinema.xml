@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:layout_marginLeft="40dp"
-            android:background="@color/Gray"
+            android:background="@color/DarkGray"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -36,14 +36,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        android:background="#151719"
+        android:background="@color/DarkBlue"
         app:layout_constraintTop_toBottomOf="@id/top_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/time"
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_height="20dp"
             android:foregroundGravity="left"
             app:cardBackgroundColor="@color/Gray"
@@ -66,7 +66,7 @@
                 android:id="@+id/downForTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/arrow_down"
                 android:visibility="gone" />
@@ -75,7 +75,49 @@
                 android:id="@+id/upForTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/arrow_up"
+                android:visibility="gone" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/name_cinema_filter"
+            android:layout_width="120dp"
+            android:layout_height="20dp"
+            android:foregroundGravity="left"
+            app:cardBackgroundColor="@color/Gray"
+            app:cardCornerRadius="4dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/time"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Название"
+                android:textColor="@color/Black" />
+
+            <ImageView
+                android:id="@+id/downForName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/arrow_down"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/upForName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/arrow_up"
                 android:visibility="gone" />
